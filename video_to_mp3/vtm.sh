@@ -29,8 +29,18 @@ for file in "$VIDEO_DIR"/*; do
   base=${filename%.*}
   # 定义输出文件的路径
   output="$MP3_DIR/$base.mp3"
+
   # 转换视频文件到MP3
-  ffmpeg -i "$file" -vn -ar 44100 -ac 2 -ab 192k "$output"
+  # ffmpeg -i "$file" -vn -ar 44100 -ac 2 -ab 192k "$output"
+
+  # 检查MP3文件是否已存在
+  if [ ! -f "$output" ]; then
+    # MP3文件不存在，执行转换
+    ffmpeg -i "$file" -vn -ar 44100 -ac 2 -ab 192k "$output"
+  else
+    # MP3文件已存在，跳过转换
+    echo "Skipping $filename, MP3 already exists."
+  fi
 done
 
 echo "Conversion complete!"
